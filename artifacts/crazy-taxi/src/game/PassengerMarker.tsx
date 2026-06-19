@@ -200,7 +200,7 @@ function WaitingPassengerMarker({ passenger }: { passenger: Passenger }) {
               opacity={0.8}
             />
           </mesh>
-        </>
+        </group>
       )}
 
       {/* Spinning dollar coin — like the original Crazy Taxi */}
@@ -311,7 +311,7 @@ function DestinationMarker({ passenger }: { passenger: Passenger }) {
             opacity={0.55}
           />
         </mesh>
-      )}
+      )})
 
       {/* ── Special indicators ──────────────────────────────── */}
       {VIP_TYPES.includes(passenger.personality as any) && (

@@ -627,13 +627,6 @@ export default function GameHUD() {
           </div>
         </div>
         <div style={{ width: 1, height: 36, background: "rgba(46,204,113,0.3)" }} />
-        <div style={{ textAlign: "center", minWidth: 100 }}>
-          <div style={{ color: "#888", fontSize: 10, letterSpacing: 2 }}>REPUTATION</div>
-          <div style={{ color: "#fff", fontSize: 18, fontFamily: "Impact, Arial Black, sans-serif", letterSpacing: 1 }}>
-            {getReputationLevelName()}
-          </div>
-        </div>
-      </div
 
       {/* Waiting fares panel */}
       <div
