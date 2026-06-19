@@ -182,24 +182,6 @@ function WaitingPassengerMarker({ passenger }: { passenger: Passenger }) {
       {/* Special request indicators */}
       {passenger.specialRequest && (
         <group position={[0, 5.8, 0]}>
-          {/* Request icon based on type */}
-          {() => {
-            const requestIcons: { [key: string]: string } = {
-              scenicRoute: "👀",
-              quickTrip: "⚡",
-              smoothRide: "🛡️",
-              funDrive: "🎉",
-              quietTrip: "🔇",
-              paparraziAvoid: "📸",
-              eventDropoff: "🎯",
-              meetingPrep: "💼",
-              sightseeingTour: "🗺️"
-            };
-            const icon = requestIcons[passenger.specialRequest] || "?";
-            // In a real implementation, we'd create a proper 3D text or sprite
-            // For now, we'll just add a simple colored indicator
-            return null; // We'll add a simple visual indicator below instead
-          }()}
           {/* Colored request indicator */}
           <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.2]}>
             <ringGeometry args={[0.4, 0.5, 16]} />
@@ -208,17 +190,17 @@ function WaitingPassengerMarker({ passenger }: { passenger: Passenger }) {
                       passenger.specialRequest === "scenicRoute" ? "#4caf50" :
                       passenger.specialRequest === "funDrive" ? "#e91e63" :
                       passenger.specialRequest === "smoothRide" ? "#2196f3" :
-                      passenger.specialRequest === "quietTrip" => "#9e9e9e" :
-                      passenger.specialRequest === "paparraziAvoid" => "#ff9800" :
-                      passenger.specialRequest === "eventDropoff" => "#f44336" :
-                      passenger.specialRequest === "meetingPrep" => "#607d8b" :
-                      passenger.specialRequest === "sightseeingTour" => "#8bc34a" :
+                      passenger.specialRequest === "quietTrip" ? "#9e9e9e" :
+                      passenger.specialRequest === "paparraziAvoid" ? "#ff9800" :
+                      passenger.specialRequest === "eventDropoff" ? "#f44336" :
+                      passenger.specialRequest === "meetingPrep" ? "#607d8b" :
+                      passenger.specialRequest === "sightseeingTour" ? "#8bc34a" :
                       "#ffffff"}
               transparent
               opacity={0.8}
             />
           </mesh>
-        </>
+        </group>
       )}
 
       {/* Spinning dollar coin — like the original Crazy Taxi */}
@@ -329,7 +311,7 @@ function DestinationMarker({ passenger }: { passenger: Passenger }) {
             opacity={0.55}
           />
         </mesh>
-      )}
+      )})
 
       {/* ── Special indicators ──────────────────────────────── */}
       {VIP_TYPES.includes(passenger.personality as any) && (

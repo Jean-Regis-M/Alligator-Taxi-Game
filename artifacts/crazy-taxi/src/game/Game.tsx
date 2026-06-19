@@ -168,6 +168,137 @@ function Scene({
         gameState={gameState}
       />
       {gameState === "playing" && (
+        <DirectionArrow
+          taxiPosition={taxiPositionRef}
+          taxiRotation={taxiRotationRef}
+        />
+      )}
+    </>
+  );
+
+// Weather effects component for particle systems
+function WeatherEffects({
+  weatherType,
+  intensity = 1.0
+}: {
+  weatherType: WeatherType;
+  intensity?: number;
+}) {
+  const particlesRef = useRef<THREE.Points>(null);
+
+  useFrame(() => {
+    if (particlesRef.current) {
+      // Rotate particle systems slightly for dynamic effect
+      particlesRef.current.rotation.y += 0.001 * intensity;
+    }
+  });
+
+  // Create particle geometry based on weather type
+  let particleCount = 0;
+  let positions: number[] = [];
+  let colors: number[] = [];
+  let sizes: number[] = [];
+
+  // Define particle properties based on weather type
+  switch (weatherType) {
+    case "rainy":
+      particleCount = Math.floor(1500 * intensity);
+      // Create vertical lines for rain
+      for (let i = 0; i < particleCount; i++) {
+        // Position in a volume around the camera
+        const x = (Math.random() - 0.5) * 400;
+        const y = Math.random() * 200;
+        const z = (Math.random() - 0.5) * 400;
+
+        positions.push(x, y, z);
+
+        // Light blue color for rain
+        colors.push(0.6, 0.8, 1.0);
+
+        // Size for rain particles (will be stretched in shader)
+        sizes.push(Math.random() * 1.5 * intensity + 0.5);
+      }
+      break;
+
+    case "snowy":
+      particleCount = Math.floor(1000 * intensity);
+      // Create snowflakes
+      for (let i = 0; i < particleCount; i++) {
+        const x = (Math.random() - 0.5) * 400;
+        const y = Math.random() * 200;
+        const z = (Math.random() - 0.5) * 400;
+
+        positions.push(x, y, z);
+
+        // White color for snow
+        colors.push(0.9, 0.9, 1.0);
+
+        // Size for snowflakes
+        sizes.push(Math.random() * 2.0 * intensity + 0.5);
+      }
+      break;
+
+    case "foggy":
+      particleCount = Math.floor(800 * intensity);
+      // Create fog particles
+      for (let i = 0; i < particleCount; i++) {
+        const x = (Math.random() - 0.5) * 300;
+        const y = Math.random() * 100;
+        const z = (Math.random() - 0.5) * 300;
+
+        positions.push(x, y, z);
+
+        // Gray color for fog
+        colors.push(0.7, 0.7, 0.8);
+
+        // Size for fog particles
+        sizes.push(Math.random() * 3.0 * intensity + 1.0);
+      }
+      break;
+
+    case "stormy":
+      particleCount = Math.floor(2000 * intensity);
+      // Create heavy rain with some variation for storm
+      for (let i = 0; i < particleCount; i++) {
+        const x = (Math.random() - 0.5) * 400;
+        const y = Math.random() * 200;
+        const z = (Math.random() - 0.5) * 400;
+
+        positions.push(x, y, z);
+
+        // Darker blue for stormy rain
+        colors.push(0.4, 0.6, 0.9);
+
+        // Size for storm particles
+        sizes.push(Math.random() * 2.0 * intensity + 0.5);
+      }
+      break;
+
+    default:
+      // Clear, cloudy, etc. - no particles
+      return null;
+  }
+
+  if (particleCount === 0) return null;
+
+  // Create buffer geometry
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+  // Create material for particles
+  const material = new THREE.PointsMaterial({
+    size: 1.0,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8,
+    sizeAttenuation: true
+  });
+
+  const particles = new THREE.Points(geometry, material);
+  particlesRef.current = particles;
+}
 
 // Weather effects component for particle systems
 function WeatherEffects({
@@ -325,4 +456,4 @@ export default function Game() {
       </div>
     </>
   );
-};
+}
